@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiURL: 'http://10.250.5.12:8080/api', //frontend
+  userCode: 100, //100: Igor Dito
+  systemDate: new Date(2019, 11, 17, 15, 30, 0, 0) //17/11/2019 15:30:00:000 
 };
 
 /*
