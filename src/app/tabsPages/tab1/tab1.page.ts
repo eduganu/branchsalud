@@ -13,6 +13,8 @@ export class Tab1Page implements OnInit{
   
   procesoBpmID = undefined;
   currentBPM : number = Math.floor(Math.random() * 4 + 57);
+  maxBPM: number = 57;
+
   caloriesBurned: number = 578;
   calories: number = 578;
   steps: number = 6798;
@@ -38,6 +40,9 @@ export class Tab1Page implements OnInit{
   
 
   ngOnInit(): void {
+
+    this.showChartSuenyoMiDia();
+
     this.procesoBpmID = setInterval(() => {
         this.currentBPM = Math.floor(Math.random() * 4 + 57);
         console.log(this.caloriesFormula());
@@ -68,26 +73,69 @@ export class Tab1Page implements OnInit{
     }
   }
 
-  showChartSuenoMiDia () {
+  showChartBPMs () {
 
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
-    data.addRows([
-      ['Sueño profundo', 3],
-      ['Sueño ligero', 1],
-      
+    // Create the data.
+    let data = google.visualization.arrayToDataTable([
+      ['Sueño ligero',     6],
+      ['Sueño profundo',      3]
     ]);
   
     // Set chart options
-    var options = {'Sueño profundo':4,
-                   'Sueño ligero':3},
-    pieHole: 0.4;
+    let options = {
+      title: 'Dreaming donut',
+      pieHole: 0.8,
+      pieSliceTextStyle: {
+        color: 'black',
+      }}
+                  
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('chart_BPMs'));
+    chart.draw(data, options);
+   
+    }
+
+
+
+  showChartSuenyoMiDia () {
+
+    // Create the data.
+    let data = google.visualization.arrayToDataTable([
+      ['Type', 'Hours per Day'],
+      ['Sueño ligero',     6],
+      ['Sueño profundo',      3]
+    ]);
+  
+    // Set chart options
+    let options = {
+      title: 'Dreaming donut',
+      pieHole: 0.8,
+      pieSliceText: 'percentage',
+      pieSliceTextStyle: {
+        color: 'black',
+      },
+      backgroundColor: {
+        fill: '#ccccff',
+        stroke: '#111111',
+        strokeWidth: 10
+      },
+      chartArea: {
+        left:30,top:30,width:'70%',height:'70%'
+      },
+      colors:['green','blue'],
+      legend:{position: 'labeled'},
+      pieSliceBorderColor: 'black',
+      tooltip: {
+        textStyle: {color: '#FF00FF', showColorCode: true},
+        isHtml: false
+      },
+      width:250
+    }
+                    
   
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('chart_SuenoMiDia'));
-        chart.draw(data, options);
+    chart.draw(data, options);
    
     }
 
