@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/User';
 
+declare var google;
 
 @Component({
   selector: 'app-tab1',
@@ -12,9 +13,9 @@ export class Tab1Page implements OnInit{
   
   procesoBpmID = undefined;
   currentBPM : number = Math.floor(Math.random() * 4 + 57);
-  caloriesBurned: number = 254;
-  calories: number = 254;
-  steps: number = 321;
+  caloriesBurned: number = 578;
+  calories: number = 578;
+  steps: number = 6798;
 
   user: User = new User();
 
@@ -27,6 +28,10 @@ export class Tab1Page implements OnInit{
     });
 
     this.userService.getPulsaciones(this.date1,this.date2).subscribe(datos => {
+      console.log(datos);
+    });
+
+    this.userService.getPasos(this.date1,this.date2).subscribe(datos => {
       console.log(datos);
     });
   }
@@ -62,5 +67,28 @@ export class Tab1Page implements OnInit{
       )/1000
     }
   }
+
+  showChartSuenoMiDia () {
+
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Topping');
+    data.addColumn('number', 'Slices');
+    data.addRows([
+      ['Sueño profundo', 3],
+      ['Sueño ligero', 1],
+      
+    ]);
+  
+    // Set chart options
+    var options = {'Sueño profundo':4,
+                   'Sueño ligero':3},
+    pieHole: 0.4;
+  
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('chart_SuenoMiDia'));
+        chart.draw(data, options);
+   
+    }
 
 }

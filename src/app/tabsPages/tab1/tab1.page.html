@@ -7,38 +7,57 @@
 </ion-header>
 
 <ion-content>
-    <p>currentBPM: {{currentBPM}}</p>
-    <p>calories: {{calories}}</p>
-    <p>steps: {{steps}}</p>
-    <!--<ion-card class="welcome-card">
-      <img src="/assets/shapes.svg" alt="" />
-      <ion-card-header>
-        <ion-card-subtitle>Get Started</ion-card-subtitle>
-        <ion-card-title>Welcome to Ionic</ion-card-title>
-      </ion-card-header>
+
+    <ion-card class="card">
+      <img src="../assets/generali.png" />
       <ion-card-content>
-        <p>Now that your app has been created, you'll want to start building out features and components. Check out some of the resources below for next steps.</p>
+        <p> Bienvenido a la app para consultar tus estadísticas vitales.</p>
+        <p>Intenta tener una vida saludable para obtener descuentos con tu seguro de Generali!</p>
       </ion-card-content>
     </ion-card>
+
     <ion-list lines="none">
       <ion-list-header>
-        <ion-label>Resources</ion-label>
+        <h3>Mi día</h3>
       </ion-list-header>
+
+      <ion-progress-bar></ion-progress-bar>
       <ion-item href="https://ionicframework.com/docs/">
-        <ion-icon slot="start" color="medium" name="book"></ion-icon>
-        <ion-label>Ionic Documentation</ion-label>
+        <ion-icon slot="start" color="medium" name="heart-empty"></ion-icon>
+        <h4>Pulsaciones</h4>
       </ion-item>
-      <ion-item href="https://ionicframework.com/docs/building/scaffolding">
-        <ion-icon slot="start" color="medium" name="build"></ion-icon>
-        <ion-label>Scaffold Out Your App</ion-label>
+        <p style="text-align: center">{{currentBPM}} PPM</p>
+        <ion-progress-bar></ion-progress-bar>
+
+      <ion-item>
+        <ion-icon slot="start" color="medium" name="walk"></ion-icon>
+        <h4>Pasos</h4>
       </ion-item>
+      <p style="text-align: center">{{steps}} pasos</p>
+      <p style="text-align: center">Objetivo: 10.000 pasos</p>
+      <ion-progress-bar></ion-progress-bar>
+
+      <ion-item>
+        <ion-icon slot="start" color="medium" name="moon"></ion-icon>
+        <h4>Sueño</h4>
+      </ion-item>
+      
+     
+      <button ion-button (click)="showChartSuenoMiDia ()">
+          Ver estadísticas
+        </button>
+      
+        <div id="chart_SuenoMiDia"></div>
+        <ion-progress-bar></ion-progress-bar>
+
       <ion-item href="https://ionicframework.com/docs/layout/structure">
-        <ion-icon slot="start" color="medium" name="grid"></ion-icon>
-        <ion-label>Change Your App Layout</ion-label>
+        <ion-icon slot="start" color="medium" name="pizza"></ion-icon>
+        <h4>Calorías</h4>
       </ion-item>
-      <ion-item href="https://ionicframework.com/docs/theming/basics">
-        <ion-icon slot="start" color="medium" name="color-fill"></ion-icon>
-        <ion-label>Theme Your App</ion-label>
-      </ion-item>
-    </ion-list>-->
+
+      <p style="text-align: center">{{calories}} calorías</p>
+      <p style="text-align: center">Objetivo: 800 calorías</p>
+      <ion-progress-bar></ion-progress-bar>
+
+    </ion-list>
 </ion-content>
