@@ -196,6 +196,8 @@ export class Tab3Page implements OnInit{
     this.datos.data.labels =  horas; //this.fechas,//
     this.datos.data.datasets[0].data = registros;
     
+
+    //this.datos.data = this.steps;
     this.initGraph(this.datos);
   }
   
