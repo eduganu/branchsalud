@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiURL: 'http://10.250.5.12:8080/api', //frontend
   userCode: 100, //100: Igor Dito
-  systemDate: new Date(2019, 11, 17, 15, 30, 0, 0) //17/11/2019 15:30:00:000 
+  systemDate: new Date("2019/11/17 00:00:00 UTC") //17/11/2019 15:30:00:000 
 };
 
 /*

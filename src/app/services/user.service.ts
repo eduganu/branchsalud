@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import { User } from '../models/User';
 import { BpmInfo } from '../models/BpmInfo';
 import { TimeService } from './time.service';
+import { StepInfo } from '../models/StepInfo';
 
 
 
@@ -26,17 +27,19 @@ export class UserService {
   }
 
   getPulsaciones(d1: Date, d2: Date):Observable<BpmInfo[]> {
+
     let d1str = this.timeService.dateFormatter(d1);
     let d2str = this.timeService.dateFormatter(d2);
-    console.log(this.regURL+ "/bpm?desde=" + d1str + "&hasta=" + d2str);
     return this.http.get<BpmInfo[]>(this.regURL+ "/bpm?desde=" + d1str + "&hasta=" + d2str);
+
   }
 
-  getPasos(d1: Date, d2: Date):Observable<BpmInfo[]> {
+  getPasos(d1: Date, d2: Date):Observable<StepInfo[]> {
+
     let d1str = this.timeService.dateFormatter(d1);
     let d2str = this.timeService.dateFormatter(d2);
-    console.log(this.regURL+ "/bpm?desde=" + d1str + "&hasta=" + d2str);
-    return this.http.get<BpmInfo[]>(this.regURL+ "/bpm?desde=" + d1str + "&hasta=" + d2str);
+    return this.http.get<StepInfo[]>(this.regURL+ "/pasos?desde=" + d1str + "&hasta=" + d2str);
+    
   }
 
   //"http://10.250.5.12:8080/api/registros/100/bpm?desde=2019/11/18 00:00:00 UTC&hasta=2019/11/18 01:00:00 UTC"
