@@ -1,9 +1,50 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab Two
+    <ion-title style="text-align: center">
+      Generali fit
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content>
+
+  <ion-card class="card">
+    <img src="/assets/generali.png" />
+
+  </ion-card>
+
+
+  <ion-list lines="none">
+    <ion-list-header>
+      <h3>Perfil</h3>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+      </ion-avatar>
+      <ion-label>Nombre Apellido</ion-label>
+    </ion-item>
+
+    <ion-icon slot="start" color="medium"></ion-icon>
+    <h6>Edad:</h6>
+    <h6>Sexo:</h6>
+    <h6>Peso:</h6>
+    <h6>Altura:</h6>
+    <ion-progress-bar></ion-progress-bar>
+
+
+    <ion-segment (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="dia">
+        <ion-label>Día</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="semana">
+        <ion-label>Semana</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="mes">
+        <ion-label>Mes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="ano">
+        <ion-label>Año</ion-label>
+      </ion-segment-button>
+    </ion-segment>
