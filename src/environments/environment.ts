@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   apiURL: 'http://saludback.herokuapp.com/api', //frontend
-  userCode: 100, //100: Igor Dito
-  systemDate: new Date("2019/11/17 00:00:00 UTC") //17/11/2019 15:30:00:000 
+  userCode: 120, //100: Igor Dito
+  systemDate: new Date("2019/11/17 00:00:00 UTC") // "2019/11/17 00:00:00 UTC"      17/11/2019 15:30:00:000 
 };
 
 /*

@@ -23,36 +23,37 @@ export class Tab3Page implements OnInit{
 
   private barChart: Chart;
 
-  user: User = undefined;
-  steps: StepInfo[] = undefined;
-  fechas: Date[] = [];
-  registroPaso:number[] = [];
+
+  registroPasos: StepInfo[] = [];
   hoy:Date = environment.systemDate;
+  deltaTime = 0
+
+  dataGraficoPasos = {
+    datasets: [{
+      label: 'Pasos acumulados',
+      data: [],
+      backgroundColor: 'rgb(205, 65, 65)', 
+      borderColor: 'rgb(205, 65, 65)',
+      borderWidth: 1
+    }]
+  }
 
   datos:any = {
     type: "bar",
-    data: {
-      labels: [], //["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-      datasets: [
-        {
-          label: "pasos",
-          data: [], //[12, 19, 3, 5, 2, 3],
-          
-          borderWidth: 1
-        }
-      ]
-    },
+    data: this.dataGraficoPasos,
     options: {
       scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
+          xAxes: [{
+              type: 'time',
+              distribution : 'series',
+              
+              
+          }],
+          yAxes:[{
+            ticks : {beginAtZero:true}
+          }]
       }
-    }
+  }
   }
  
   constructor(private userService: UserService) {}
@@ -64,141 +65,154 @@ export class Tab3Page implements OnInit{
     })
 
     this.userService.getPasos(new Date(this.hoy.getTime() - 86400000), new Date(this.hoy)).subscribe(pasos =>  {
-       this.steps = pasos;
-       console.log(this.steps)
+      this.registroPasos = pasos;
+      //console.log(this.registroPasos)
 
-       /*this.steps.forEach(element => {
-          this.fechas.push(element.datetime);
-          this.registroPaso.push(element.stepAccumulated)
-          */
-        this.porHoras();
+      let parsedDatos = [];
+      pasos.forEach(element => {
+      parsedDatos.push({x:element.datetime , y:element.stepAccumulated})
+      
+      });
+      this.dataGraficoPasos.datasets[0].data = parsedDatos;
+      console.log(parsedDatos)
+      
+      this.showPasosTiempo("dia");
     })
-
-    this.initGraph(this.datos);
+    
   }
 
   initGraph(datos){
     this.barChart = new Chart(this.barCanvas.nativeElement, datos);
   }
-
-  prueba() {
-      this.datos.data.labels =  ["rojo ", "Blue", "amarilo", "Green", "Purple", "Orange"]; //this.fechas,//
-      this.datos.data.datasets[0].data = [100, 19, 3, 50, 90, 5];
-      
-      this.initGraph(this.datos);
-  }
-
-  
-
-  datosSemana() {
-    this.userService.getPasos(new Date(this.hoy.getTime() - (604800000 - 36000000)), new Date(this.hoy)).subscribe(pasos =>{ //
-      this.steps = pasos;
-
-      this.porDias()
-    })
-
-    
-  }
-
-  datosDia() {
-    this.userService.getPasos(new Date(this.hoy.getTime() - 86400000), new Date(this.hoy)).subscribe(pasos =>{
-      this.steps = pasos;
-
-      this.porHoras()
-    })
-
-    
-  }
-
-  porDias(){
-
-    let listaPorDias = [];
-    let dias = [];
-    let registros = [];
-
-    console.log(this.steps)
-    this.steps.forEach(element =>{
-      let dia = new Date(element.datetime).getUTCDay();
-      console.log("Dia " + dia);
-      if (!listaPorDias[dia]) {
-        listaPorDias[dia] = [];
-      }
-      listaPorDias[dia].push(element.stepAccumulated);
-    })
  
-    let diaIndice = 0
-    
 
-    listaPorDias.forEach(elemento => {
-      dias.push(diaIndice);
-      let total = 0;
-      for (var i = 0; i < elemento.length; i++){
-        total += elemento[i] 
+  showPasosTiempo(lapso:string){
+
+    if (lapso === "semana"){
+      this.deltaTime = 604800000
+      
+    } else if (lapso === "dia") {
+      this.deltaTime = 86400000
+    }
+
+    this.userService.getPasos(new Date(this.hoy.getTime() - this.deltaTime),this.hoy).subscribe(datos => {
+      
+      let parsedDatosDia = [];
+      let fechasref = [];
+
+      datos.forEach(element => {
+        let anyo = new Date(element.datetime).getUTCFullYear();
+        let mes = new Date(element.datetime).getUTCMonth();
+        let dia = new Date(element.datetime).getUTCDay();
+        let hora = new Date(element.datetime).getUTCHours();
+        
+        let fecha = new Date(anyo + "/" + mes + "/" + dia + " " + hora + ":00:00")
+        
+        if (lapso === "semana"){
+          fecha = new Date(anyo + "/" + mes + "/" + dia + " " + "00:00:00")
+          
+        } else if (lapso === "dia") {
+          fecha = new Date(anyo + "/" + mes + "/" + dia + " " + hora + ":00:00")
+        }
+        
+        parsedDatosDia.push({x:fecha, y:element.stepAccumulated})
+
+        if (!fechasref.includes(fecha)){
+          fechasref.push(fecha)
+        }
+        
+      })
+
+      let nuevaArrayAgrupada = []
+      let dia = parsedDatosDia[0].x;
+      let valores = [];
+      for (let i = 0; i < parsedDatosDia.length; i++){
+
+        if(parsedDatosDia[i].x.getTime() === dia.getTime()) {
+
+          valores.push(parsedDatosDia[i].y);
+
+        } else {
+
+          if(valores.length > 0) {
+
+            let suma = valores.reduce((total,amount) => total + amount)
+            nuevaArrayAgrupada.push({x:dia, y:suma})
+            dia = parsedDatosDia[i].x;
+            suma = 0
+            valores = []
+
+          }
+        }
       }
-      //let average = Math.round(total / elemento.length);
-      registros.push(total)
-      diaIndice++;
 
+      if(valores.length > 0) {
+
+        let suma = valores.reduce((total,amount) => total + amount)
+        nuevaArrayAgrupada.push({x:dia, y:(Math.round(suma/valores.length))})
+
+        dia = parsedDatosDia[parsedDatosDia.length-1].x;
+      
+        suma = 0
+        valores = []
+
+      }
+
+      this.dataGraficoPasos.datasets[0].data = nuevaArrayAgrupada;
+      this.initGraph(this.datos);
     })
-    
-    console.log(dias)
-    console.log(registros)
-    this.datos.data.labels =  dias; //this.fechas,//
-    this.datos.data.datasets[0].data = registros;
-    
-    this.initGraph(this.datos);
-
   }
 
-  porHoras() {
-    
-    let listaPorHoras = [];
-    let horas = [];
-    let registros = [];
-    /*
-    const listado = this.steps.reduce((listado, registros) => {
-      const horis = new Date(registros.datetime).toTimeString().substr(0,2);
-      if (!listado[horis]) {
-        listado[horis] = [];
-      }
-      listado[horis].push(registros.stepAccumulated);
-      return listado;
-    }, []);
+  showPasosSemana(){
+    this.userService.getPasos(new Date(this.hoy.getTime() - 604800000),this.hoy).subscribe(datos => {
+      
+      let parsedDatosDia = [];
+      let fechasref = [];
 
-    console.log(listado)
-  */
+      datos.forEach(element => {
+        let anyo = new Date(element.datetime).getUTCFullYear();
+        let mes = new Date(element.datetime).getUTCMonth();
+        let dia = new Date(element.datetime).getUTCDay();
+        let hora = new Date(element.datetime).getUTCHours();
+        let fecha = new Date(anyo + "/" + mes + "/" + dia + " " + "00:00:00")
+        
+        parsedDatosDia.push({x:fecha, y:element.stepAccumulated})
 
-    this.steps.forEach(element =>{
-      let horas = new Date(element.datetime).getUTCHours();
-      //console.log("Horas " + element.datetime);
-      if (!listaPorHoras[horas]) {
-        listaPorHoras[horas] = [];
+        if (!fechasref.includes(fecha)){
+          fechasref.push(fecha)
+        }
+        
+      })
+
+      let nuevaArrayAgrupada = []
+      let dia = parsedDatosDia[0].x;
+      console.log(parsedDatosDia[0].x.getTime() === parsedDatosDia[1].x.getTime())
+      let valores = [];
+      for (let i = 0; i < parsedDatosDia.length; i++){
+        if(parsedDatosDia[i].x.getTime() === dia.getTime()){
+          valores.push(parsedDatosDia[i].y);
+        } else {
+          if(valores.length > 0){
+            let suma = valores.reduce((total,amount) => total + amount)
+            nuevaArrayAgrupada.push({x:dia, y:suma})
+            dia = parsedDatosDia[i].x;
+            suma = 0
+            valores = []
+          }
+        }
       }
-      listaPorHoras[horas].push(element.stepAccumulated);
+      if(valores.length > 0){
+        let suma = valores.reduce((total,amount) => total + amount)
+        nuevaArrayAgrupada.push({x:dia, y:(Math.round(suma/valores.length))})
+        dia = parsedDatosDia[-1].x;
+        suma = 0
+        valores = []
+      }
+
+      this.dataGraficoPasos.datasets[0].data = nuevaArrayAgrupada;
+      this.initGraph(this.datos);
     })
-    
-
-    let horaIndice = 0;
-    listaPorHoras.forEach(elemento => {
-      horas.push(horaIndice);
-      let total = 0;
-      for (var i = 0; i < elemento.length; i++){
-        total += elemento[i] 
-      }
-      //let average = Math.round(total / elemento.length);
-      registros.push(total)
-      horaIndice++;
-
-    })
-    
-    console.log(horas)
-    console.log(registros)
-    this.datos.data.labels =  horas; //this.fechas,//
-    this.datos.data.datasets[0].data = registros;
-    
-
-    //this.datos.data = this.steps;
-    this.initGraph(this.datos);
   }
+
   
 }

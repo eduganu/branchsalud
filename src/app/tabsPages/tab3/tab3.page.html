@@ -1,10 +1,25 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Charts
+      Pasos Caminados
     </ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-segment>
+  <ion-segment-button (click)="showPasosTiempo('dia')" value="dia">
+    <ion-label>Día</ion-label>
+  </ion-segment-button>
+  <ion-segment-button (click)="showPasosTiempo('semana')" value="semana">
+    <ion-label>Semana</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="mes">
+    <ion-label>Mes</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="ano">
+    <ion-label>Año</ion-label>
+  </ion-segment-button>
+</ion-segment>
 
 <ion-content>
   <div class="ion-padding">
@@ -14,27 +29,6 @@
       </ion-card-header>
       <ion-card-content>
         <canvas #barCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
-
-    <button ion-button (click)="datosDia()">Por Dia</button>
-    <button ion-button (click)="datosSemana()">Por Semana</button>
-
-    <ion-card>
-      <ion-card-header>
-        Doughnut Chart
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #doughnutCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        Line Chart
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #lineCanvas></canvas>
       </ion-card-content>
     </ion-card>
   </div>

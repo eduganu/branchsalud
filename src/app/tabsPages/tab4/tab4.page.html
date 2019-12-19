@@ -1,8 +1,24 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>tab4</ion-title>
+    <ion-title>Pulsaciones</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<ion-segment>
+  <ion-segment-button (click)="showBpmTiempo('dia')" value="dia">
+    <ion-label>Día</ion-label>
+  </ion-segment-button>
+  <ion-segment-button (click)="showBpmTiempo('semana')" value="semana">
+    <ion-label>Semana</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="mes">
+    <ion-label>Mes</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="ano">
+    <ion-label>Año</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
 <ion-content>
   <div class="ion-padding">
     <ion-card>
