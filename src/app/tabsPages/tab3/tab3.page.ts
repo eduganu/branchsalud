@@ -33,7 +33,7 @@ export class Tab3Page implements OnInit{
       label: 'Pasos acumulados',
       data: [],
       backgroundColor: 'rgb(205, 65, 65)', 
-      borderColor: 'rgb(205, 65, 65)',
+      borderColor: 'rgb(230, 10, 10)',
       borderWidth: 1
     }]
   }
@@ -46,8 +46,6 @@ export class Tab3Page implements OnInit{
           xAxes: [{
               type: 'time',
               distribution : 'series',
-              
-              
           }],
           yAxes:[{
             ticks : {beginAtZero:true}
